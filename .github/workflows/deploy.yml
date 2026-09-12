@@ -36,8 +36,8 @@ jobs:
         env:
           GITHUB_PAGES: 'true'
 
-      - name: Add SPA fallback
-        run: cp dist/index.html dist/404.html
+      - name: Prepare GitHub Pages routes
+        run: node scripts/prepare-pages.mjs
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
