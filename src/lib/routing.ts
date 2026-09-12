@@ -2,13 +2,21 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 export const pagePathname = () => {
   const pathname = window.location.pathname;
+  const normalize = (path: string) => {
+    if (path.length > 1 && path.endsWith('/')) {
+      return path.slice(0, -1);
+    }
+
+    return path;
+  };
 
   if (basePath && basePath !== '/' && pathname.toLowerCase().startsWith(basePath.toLowerCase())) {
     const stripped = pathname.slice(basePath.length) || '/';
-    return stripped.startsWith('/') ? stripped : `/${stripped}`;
+    const normalized = stripped.startsWith('/') ? stripped : `/${stripped}`;
+    return normalize(normalized);
   }
 
-  return pathname;
+  return normalize(pathname);
 };
 
 export const withBasePath = (path: string) => {
