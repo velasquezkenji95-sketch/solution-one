@@ -7,7 +7,7 @@ const dockItems = [
   { label: 'Products', id: 'products', path: '/products', icon: Layers },
   { label: 'Solutions', id: 'unify', path: '/solutions', icon: Zap },
   { label: 'About Us', id: 'about', path: '/about', icon: Info },
-  { label: 'Why Us', id: 'why-us', path: '/WhyUs', icon: HelpCircle },
+  { label: 'Why Us', id: 'why-us', path: '/why-us', icon: HelpCircle },
   { label: 'Contact Us', id: 'contact', path: '/contact', icon: PhoneCall },
 ];
 
@@ -29,7 +29,7 @@ export const Navbar: React.FC = () => {
       return;
     }
     if (id === 'why-us') {
-      navigateTo('/WhyUs');
+      navigateTo('/why-us');
       return;
     }
     if (id === 'contact') {
@@ -92,9 +92,7 @@ export const Navbar: React.FC = () => {
 
           {dockItems.map((item) => {
             const Icon = item.icon;
-            const isActive =
-              pathname === item.path ||
-              (item.path === '/WhyUs' && ['/whyus', '/why-us'].includes(pathname.toLowerCase()));
+            const isActive = pathname === item.path || (item.path === '/why-us' && pathname === '/whyus');
             return (
               <button
                 key={item.id}

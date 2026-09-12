@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
       return;
     }
     if (id === 'why-us') {
-      navigateTo('/WhyUs');
+      navigateTo('/why-us');
       return;
     }
     if (id === 'contact') {

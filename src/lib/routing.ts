@@ -3,11 +3,17 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 export const pagePathname = () => {
   const pathname = window.location.pathname;
   const normalize = (path: string) => {
-    if (path.length > 1 && path.endsWith('/')) {
-      return path.slice(0, -1);
+    let normalized = path;
+
+    if (normalized.endsWith('/index.html')) {
+      normalized = normalized.slice(0, -'/index.html'.length) || '/';
     }
 
-    return path;
+    if (normalized.length > 1 && normalized.endsWith('/')) {
+      normalized = normalized.slice(0, -1);
+    }
+
+    return normalized.toLowerCase();
   };
 
   if (basePath && basePath !== '/' && pathname.toLowerCase().startsWith(basePath.toLowerCase())) {
@@ -29,13 +35,23 @@ export const withBasePath = (path: string) => {
   return normalized === '/' ? `${basePath}/` : `${basePath}${normalized}`;
 };
 
+export const withBasePagePath = (path: string) => {
+  const href = withBasePath(path);
+
+  if (href.endsWith('/')) {
+    return href;
+  }
+
+  return `${href}/`;
+};
+
 export const publicAsset = (path: string) => {
   const normalized = path.replace(/^\//, '');
   return `${import.meta.env.BASE_URL}${normalized}`;
 };
 
 export const navigateTo = (path: string) => {
-  window.location.href = withBasePath(path);
+  window.location.href = path === '/' ? withBasePath('/') : withBasePagePath(path);
 };
 
 export const navigateToHash = (id: string) => {

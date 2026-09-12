@@ -29,7 +29,7 @@ export function App() {
     return <AboutPage />;
   }
 
-  if (pathname === '/WhyUs' || pathname === '/why-us') {
+  if (pathname === '/whyus' || pathname === '/why-us') {
     return <WhyUsPage />;
   }
 
