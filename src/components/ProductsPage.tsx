@@ -13,8 +13,8 @@ import interfaceAnimation from '../assets/payatom-product-lotties/anim-8951.json
 import complianceAnimation from '../assets/payatom-product-lotties/anim-44204.json';
 import registrationAnimation from '../assets/payatom-product-lotties/anim-28723.json';
 
-const heroVideo = publicAsset('/Products/ProductsHero2.mp4');
-const heroPoster = publicAsset('/Products/product-poster.png');
+const heroVideo = publicAsset('/product-assets/ProductsHero2.mp4');
+const heroPoster = publicAsset('/product-assets/product-poster.png');
 
 const productFeatures = [
   {
@@ -48,19 +48,19 @@ const infrastructureCards = [
     title: 'Smart Routing',
     description:
       'Automatically route every transaction through the best available path for stronger approval rates and faster settlements.',
-    image: publicAsset('/Products/inteligent.6949a635.png'),
+    image: publicAsset('/product-assets/inteligent.6949a635.png'),
   },
   {
     title: 'Merchant Control',
     description:
       'Manage settlement preferences, payment channels, currency movement, and operational visibility from one connected dashboard.',
-    image: publicAsset('/Products/control.963236a1.png'),
+    image: publicAsset('/product-assets/control.963236a1.png'),
   },
   {
     title: 'Easy Integration',
     description:
       'Plug SOLUTION ONE into existing systems with flexible APIs, hosted checkout, and integration support for global merchants.',
-    image: publicAsset('/Products/plug.56fd4e02.png'),
+    image: publicAsset('/product-assets/plug.56fd4e02.png'),
   },
 ];
 
@@ -448,7 +448,7 @@ const ProductsCta: React.FC = () => (
       <div className="relative flex w-full items-center justify-center">
         <div className="absolute flex h-full w-full scale-105 items-center justify-center rounded-full border-[14px] border-[#faf7f2] max-lg:size-60" />
         <video
-          src={publicAsset('/Products/sphere.mp4')}
+          src={publicAsset('/product-assets/sphere.mp4')}
           autoPlay
           loop
           muted

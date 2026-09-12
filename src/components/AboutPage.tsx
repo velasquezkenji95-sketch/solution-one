@@ -36,28 +36,28 @@ const hubCards = [
   {
     title: 'Accept payments',
     text: 'Global online cards and local payments acceptance platform. Settle in local currency into your global accounts.',
-    image: publicAsset('/About/Globe.e6acc1e5.png'),
+    image: publicAsset('/about-assets/Globe.e6acc1e5.png'),
     large: true,
   },
   {
     title: 'Make payments',
     text: 'Multiple payment methods to 180+ countries, same-day payments in priority markets.',
-    image: publicAsset('/About/make-payments.df575088.png'),
+    image: publicAsset('/about-assets/make-payments.df575088.png'),
   },
   {
     title: 'Global accounts',
     text: 'Build trust with local customers and business partners.',
-    image: publicAsset('/About/global-accounts.bb409b84.png'),
+    image: publicAsset('/about-assets/global-accounts.bb409b84.png'),
   },
   {
     title: 'Multi-currency',
     text: 'Hold, convert, send, and receive money in 30+ currencies across 180+ countries.',
-    image: publicAsset('/About/multicurrency.4a5a5717.png'),
+    image: publicAsset('/about-assets/multicurrency.4a5a5717.png'),
   },
   {
     title: 'Borderless cards',
     text: 'Create employee and company cards for your business in minutes.',
-    image: publicAsset('/About/borderless-cards.99b1d684.png'),
+    image: publicAsset('/about-assets/borderless-cards.99b1d684.png'),
   },
 ] as const;
 
@@ -83,7 +83,7 @@ const AboutHero: React.FC = () => (
     <Navbar />
     <div className="absolute inset-0 z-0 flex items-center justify-center bg-[#06142e]">
       <Spline
-        scene={publicAsset('/About/scene.splinecode')}
+        scene={publicAsset('/about-assets/scene.splinecode')}
         className="h-full w-full object-cover [filter:hue-rotate(195deg)_saturate(1.2)]"
       />
     </div>
@@ -101,7 +101,7 @@ const Timeline: React.FC = () => (
     <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
       <div className="sticky top-0 hidden h-screen items-end justify-center overflow-hidden lg:flex">
         <motion.img
-          src={publicAsset('/About/futuristic.29ab89b8.png')}
+          src={publicAsset('/about-assets/futuristic.29ab89b8.png')}
           alt=""
           initial={{ opacity: 0, x: -80 }}
           whileInView={{ opacity: 1, x: 0 }}

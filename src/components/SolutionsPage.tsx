@@ -72,8 +72,8 @@ const SolutionsHero: React.FC = () => (
   <section className="relative mb-16 flex h-[100svh] w-full flex-col items-start justify-end overflow-hidden bg-black px-5 pb-16 text-white md:px-10">
     <Navbar />
     <video
-      src={publicAsset('/Solutions/SolutionsHero.mp4')}
-      poster={publicAsset('/Solutions/solution-poster.png')}
+      src={publicAsset('/solution-assets/SolutionsHero.mp4')}
+      poster={publicAsset('/solution-assets/solution-poster.png')}
       autoPlay
       loop
       muted
