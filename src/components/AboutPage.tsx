@@ -7,35 +7,16 @@ import { Footer } from './Footer';
 import { PayatomWorld } from './PayatomWorld';
 import { publicAsset } from '../lib/routing';
 
-const years = [
-  {
-    year: '2016',
-    title: '$100M in Processed Volume',
-    text: 'Crossed $100 million in processed payments milestone. With 5 currency supported.',
-  },
-  {
-    year: '2020',
-    title: 'Global Payment Gateway Launch',
-    text: 'Launched full-scale PAYPAY Payment Gateway platform. Added support for UPI India UPI network. Reached 500+ active merchants using SOLUTION ONE product in India.',
-  },
-  {
-    year: '2022',
-    title: '$1 Billion Processed & Crypto Integration',
-    text: 'Crossed $1 billion+ USD in total processing volume. Launched VFpay, enabling crypto-to-fiat merchant payments. Onboarded international clients to fully support in SEA/pacific regions.',
-  },
-  {
-    year: '2024',
-    title: 'Global Partnerships',
-    text: 'Established partnerships with leading liquidity providers and financial institutions across 40+ countries. Upgraded infrastructure for high-volume enterprise processing. Crossed $2 billion+ USD in single year processing volume.',
-  },
-] as const;
+import { milestones } from '../lib/milestones';
 
-const countries = ['Bangladesh', 'India', 'Thailand', 'Indonesia', 'Vietnam', 'Sri Lanka', 'Nepal', 'Bhutan', 'Malaysia', 'Korea'];
+const years = milestones;
+
+const countries = ['Bangladesh', 'India', 'Thailand', 'Indonesia', 'Vietnam', 'Sri Lanka', 'Nepal', 'Japan', 'Malaysia', 'Korea'];
 
 const hubCards = [
   {
     title: 'Accept payments',
-    text: 'Global online cards and local payments acceptance platform. Settle in local currency into your global accounts.',
+    text: 'Global online and local payments acceptance platform. Settle in local/crypto currency into your global accounts.',
     image: publicAsset('/about-assets/Globe.e6acc1e5.png'),
     large: true,
   },
@@ -198,9 +179,6 @@ const FinanceHub: React.FC = () => (
                 <h3 className="text-2xl font-semibold md:text-3xl">{card.title}</h3>
                 <p className="mt-5 text-sm font-semibold leading-relaxed md:text-base">{card.text}</p>
               </div>
-              <a href="/#contact" className={`${'large' in card ? 'text-[#c9e8ff]' : 'text-[#2b6fff]'} text-lg font-semibold`}>
-                Learn more
-              </a>
             </div>
             <div className="ml-auto flex items-end justify-center overflow-hidden">
               <img src={card.image} alt="" className="h-full max-h-[380px] w-full object-contain [filter:hue-rotate(190deg)_saturate(1.25)]" />
@@ -226,7 +204,9 @@ const TeamSection: React.FC = () => (
             transition={{ duration: 0.5, delay: Math.min(index * 0.04, 0.18) }}
             className="text-center"
           >
-            <div className="mx-auto size-64 overflow-hidden rounded-full bg-[radial-gradient(circle_at_50%_10%,#cfe8ff_0%,#2b6fff_45%,#0b47bd_100%)] shadow-[0_18px_35px_rgba(6,20,46,0.12)]" />
+            <div className="mx-auto aspect-square w-full max-w-64 overflow-hidden rounded-full bg-[#dcecff]">
+              <img src={publicAsset(`/about-assets/team/portrait-${index + 1}.jpg`)} alt="Stock team portrait" loading="lazy" width={400} height={400} className="h-full w-full object-cover" />
+            </div>
             <h3 className="mt-4 text-lg font-semibold">{name}</h3>
             <p className="mt-2 text-lg font-medium">{role}</p>
           </motion.article>

@@ -1,45 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Lottie, type LottieHandle } from 'lottie-react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { motion, type MotionValue, useInView, useMotionValue, useReducedMotion, useScroll } from 'framer-motion';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { Logo } from './Logo';
 import { publicAsset } from '../lib/routing';
-import atomAsset from '../assets/payatom-ref/Atom.d12a4e49.webp';
+import { ProductCard3D } from './ProductCard3D';
 import flowAnimation from '../assets/payatom-product-lotties/anim-24660.json';
 import integrationAnimation from '../assets/payatom-product-lotties/anim-34903.json';
-import interfaceAnimation from '../assets/payatom-product-lotties/anim-8951.json';
-import complianceAnimation from '../assets/payatom-product-lotties/anim-44204.json';
-import registrationAnimation from '../assets/payatom-product-lotties/anim-28723.json';
 
 const heroVideo = publicAsset('/product-assets/ProductsHero2.mp4');
 const heroPoster = publicAsset('/product-assets/product-poster.png');
 
 const productFeatures = [
   {
-    title: 'SOLUTION ONE Payment Gateway',
-    description: 'Unified payment gateway for global merchants to accept payments via UPI.',
+    title: 'Unified Payment Gateway',
+    description: 'Unified payment gateway for global merchants to accept payments any currency',
   },
   {
     title: 'Crypto Payment Gateway',
     description: 'Accept and process cryptocurrency payments (USDT, BTC, ETH, etc.) globally.',
   },
   {
-    title: 'Decentralized Wallet',
-    description: 'A non-custodial, decentralized wallet that enables gas-free USDT (TRC20) transfers.',
-  },
-  {
     title: 'SOLUTION ONE Payouts',
-    description: 'Instant payout infrastructure for businesses to distribute funds globally.',
+    description: 'Instant payout infrastructure for businesses to distribute funds globally in any currencies you like.',
   },
   {
-    title: 'Fiat-Crypto Bridge (Upcoming)',
-    description: 'A hybrid solution allowing merchants to accept fiat and instantly convert to crypto.',
+    title: 'Fiat–Crypto Settlement',
+    description: 'A hybrid solution allowing merchants to accept fiat and instantly convert local currencies to crypto.',
   },
   {
     title: 'Enterprise Solutions',
-    description: 'Custom integrations, high-volume processing, 24x7 support.',
+    description: 'Custom integrations, high-volume processing, 24x7 support',
   },
 ];
 
@@ -79,30 +72,10 @@ const flowCards = [
     tone: 'bg-[#00a6ff] text-white',
   },
   {
-    title: 'Effortless user interface',
-    description: 'Enjoy a clean, intuitive interface for easy, hassle-free payment management.',
-    animation: interfaceAnimation,
-    tone: 'bg-[#5fb9ff] text-white',
-  },
-  {
     title: 'Let your Clients Decide',
     description: 'Let clients choose their preferred payment methods for easy, hassle-free transactions.',
     custom: 'client-choice',
     tone: 'bg-[#F6F6F6] text-black',
-  },
-  {
-    title: 'PCI DSS Level 1 compliance',
-    description:
-      'Discover innovative solutions that transform digital experiences through cutting-edge technology and seamless user interactions.',
-    animation: complianceAnimation,
-    tone: 'bg-[#2b6fff] text-white',
-  },
-  {
-    title: 'VISA Third Party Agent (TPA) and Mastercard Registration Program',
-    description:
-      'We are registered as VISA Third Party Agent (TPA) and Mastercard Registration Program (MRP), adding an extra layer of security.',
-    animation: registrationAnimation,
-    tone: 'bg-[#00a6ff] text-white',
   },
 ];
 
@@ -142,111 +115,22 @@ const ProductsHero: React.FC = () => (
 
 const ProductFeatureScroller: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [openFeature, setOpenFeature] = useState<number | null>(null);
-  const [visibleFeatures, setVisibleFeatures] = useState<number[]>([]);
+  const reducedMotion = Boolean(useReducedMotion());
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
-  const cardScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.94]);
-  const cardRotate = useTransform(scrollYProgress, [0, 0.5, 1], [-5, 0, 5]);
-  const cardY = useTransform(scrollYProgress, [0, 1], [14, -20]);
-  const atomRotate = useTransform(scrollYProgress, [0, 1], [-16, 28]);
-  const railX = useTransform(scrollYProgress, [0, 1], ['-18%', '18%']);
-  const glowScale = useTransform(scrollYProgress, [0, 0.55, 1], [0.9, 1.08, 0.96]);
-
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    setVisibleFeatures((current) => {
-      let changed = false;
-      let next = current;
-
-      productFeatures.forEach((_, index) => {
-        const start = 0.08 * index;
-        const end = start + 0.54;
-        const isVisible = next.includes(index);
-
-        if (latest > end && !isVisible) {
-          next = [...next, index];
-          changed = true;
-        }
-
-        if (latest < start && isVisible) {
-          next = next.filter((item) => item !== index);
-          changed = true;
-        }
-      });
-
-      return changed ? next : current;
-    });
-
-    setOpenFeature((current) => {
-      if (current === null) return current;
-      const start = 0.08 * current;
-      if (latest < start) {
-        return null;
-      }
-      return current;
-    });
-  });
-
   return (
-    <section ref={sectionRef} className="relative h-[300svh] w-full bg-[#faf7f2] pb-10 pt-20">
-      <div className="sticky top-0 w-full overflow-hidden pt-10 lg:h-svh lg:pt-20">
-        <h2 className="mb-4 px-5 text-center text-3xl font-semibold leading-none text-[#0b47bd] md:text-4xl lg:text-left lg:text-6xl">
-          Product Features
-        </h2>
-
-        <div className="grid w-full grid-cols-1 md:mt-10 lg:mt-40 lg:grid-cols-3">
-          <div className="relative flex h-70 w-full justify-center overflow-hidden lg:col-span-2 lg:h-120">
-            <motion.div
-              style={{ rotate: cardRotate, scale: cardScale, y: cardY, willChange: 'transform' }}
-              className="relative mt-2 aspect-[1.58] w-[min(74vw,600px)] overflow-hidden rounded-xl bg-gradient-to-br from-[#e9f6ff] via-[#3186ff] to-[#07145b] shadow-[0_42px_120px_rgba(43,111,255,0.2)]"
-            >
-              <motion.div
-                aria-hidden="true"
-                style={{ scale: glowScale }}
-                className="absolute -right-[12%] -top-[30%] size-[62%] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.72),rgba(74,184,255,0.35)_40%,transparent_70%)]"
-              />
-              <motion.img
-                src={atomAsset}
-                alt=""
-                style={{ rotate: atomRotate }}
-                className="absolute -right-[7%] -top-[18%] w-[58%] opacity-80"
-              />
-              <motion.div
-                aria-hidden="true"
-                style={{ x: railX }}
-                className="absolute left-[16%] top-[36%] h-[15%] w-[72%] rounded-full bg-gradient-to-r from-white/70 via-[#7bdfff]/55 to-white/20 blur-[1px]"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
-                  backgroundSize: '13px 13px',
-                }}
-              />
-              <div className="absolute bottom-[9%] left-[7%] flex h-[20%] w-[54%] items-center rounded-xl bg-[#2b6fff] px-5 shadow-[0_14px_34px_rgba(9,34,112,0.3)]">
-                <Logo className="w-full" />
-              </div>
-              <div className="absolute bottom-[14%] right-[8%] flex items-center gap-2 rounded-full bg-white/92 px-4 py-2 text-sm font-semibold text-[#0b348f] shadow-[0_10px_26px_rgba(9,34,112,0.18)]">
-                <span className="size-2 rounded-full bg-[#28d7ff]" />
-                Global ready
-              </div>
-            </motion.div>
+    <section ref={sectionRef} data-product-features className={`relative bg-[#faf7f2] text-[#0b47bd] ${reducedMotion ? 'py-20' : 'h-[300svh]'}`}>
+      <div className={`w-full px-5 pb-20 pt-8 lg:pt-16 ${reducedMotion ? '' : 'sticky top-0 min-h-svh'}`}>
+        <h2 className="text-center text-3xl font-semibold leading-none md:text-4xl lg:text-left lg:text-6xl">Product Features</h2>
+        <div className="mt-6 grid grid-cols-1 lg:mt-20 lg:grid-cols-3">
+          <div className="h-[24svh] min-h-[150px] lg:col-span-2 lg:h-[53svh]">
+            <ProductCard3D progress={scrollYProgress} reducedMotion={reducedMotion} />
           </div>
-
-          <div className="mt-10 flex w-full flex-col gap-10 px-5 md:mt-10 lg:mt-0 lg:max-w-md">
+          <div className="mx-auto w-full max-w-xl lg:max-w-md">
             {productFeatures.map((feature, index) => (
-              <ProductFeatureRow
-                key={feature.title}
-                feature={feature}
-                index={index}
-                scrollYProgress={scrollYProgress}
-                canInteract={visibleFeatures.includes(index)}
-                isOpen={openFeature === index}
-                setOpenFeature={setOpenFeature}
-              />
+              <ProductFeatureRow key={feature.title} feature={feature} index={index} progress={scrollYProgress} reducedMotion={reducedMotion} />
             ))}
           </div>
         </div>
@@ -260,44 +144,41 @@ type ProductFeature = (typeof productFeatures)[number];
 const ProductFeatureRow: React.FC<{
   feature: ProductFeature;
   index: number;
-  scrollYProgress: ReturnType<typeof useScroll>['scrollYProgress'];
-  canInteract: boolean;
-  isOpen: boolean;
-  setOpenFeature: React.Dispatch<React.SetStateAction<number | null>>;
-}> = ({ feature, index, scrollYProgress, canInteract, isOpen, setOpenFeature }) => {
-  const start = 0.08 * index;
-  const y = useTransform(scrollYProgress, [start, start + 0.32], [0, -(50 * index)]);
-  const opacity = useTransform(scrollYProgress, [start, start + 0.08, start + 0.4], [0, 1, 1]);
-
+  progress: MotionValue<number>;
+  reducedMotion: boolean;
+}> = ({ feature, index, progress, reducedMotion }) => {
+  const [open, setOpen] = useState(false);
+  const start = index * 0.08;
+  const opacity = useMotionValue(0);
+  const y = useMotionValue(index * 38);
+  useEffect(() => {
+    const update = (value: number) => {
+      opacity.set(Math.max(0, Math.min(1, (value - start) / 0.08)));
+      y.set(index * 38 * (1 - Math.max(0, Math.min(1, (value - start) / 0.32))));
+    };
+    update(progress.get());
+    return progress.on('change', update);
+  }, [progress, start, index, opacity, y]);
   return (
-    <motion.div style={{ y }} className="relative bg-[#faf7f2] tracking-tight text-[#0b47bd]">
-      <motion.button
-        type="button"
-        style={{ opacity }}
-        onMouseEnter={() => canInteract && setOpenFeature(index)}
-        onMouseLeave={() => canInteract && setOpenFeature(null)}
-        onClick={() => canInteract && setOpenFeature(isOpen ? null : index)}
-        className={`flex w-full flex-col gap-3 border-t border-[#9cc7ff] py-5 text-left transition-all duration-300 ${
-          canInteract ? 'pointer-events-auto cursor-pointer' : 'pointer-events-none cursor-default'
-        }`}
-      >
-        <span className="flex items-start gap-5">
-          <span className="mt-1 flex w-fit shrink-0 items-center justify-evenly gap-2 rounded-full border border-[#0b47bd] px-3 py-0.5">
-            <span className="size-2 rounded-full bg-[#0b47bd]" />
-            <span className="text-sm">{index + 1}</span>
-          </span>
-          <span className="min-w-0 flex-1 text-xl tracking-tight md:text-2xl">{feature.title}</span>
-        </span>
-        <motion.span
-          initial={false}
-          animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="block overflow-hidden pl-[4.8rem] text-base leading-snug md:text-lg"
-        >
-          {feature.description}
-        </motion.span>
-      </motion.button>
-    </motion.div>
+    <motion.article
+      style={reducedMotion ? {} : { opacity, y, zIndex: index }}
+      className="relative border-t border-[#9cc7ff] bg-[#faf7f2]"
+      onPointerEnter={event => { if (event.pointerType === 'mouse') setOpen(true); }}
+      onPointerLeave={event => { if (event.pointerType === 'mouse') setOpen(false); }}
+    >
+      <button type="button" aria-expanded={open || reducedMotion} aria-controls={`product-description-${index}`}
+        onClick={() => setOpen(value => window.matchMedia('(hover: hover)').matches ? true : !value)}
+        onFocus={event => { if (event.currentTarget.matches(':focus-visible')) setOpen(true); }}
+        className="flex w-full cursor-pointer items-start gap-4 py-4 text-left focus-visible:outline-2 focus-visible:outline-blue-600">
+        <span className="mt-1 shrink-0 rounded-full border border-[#0b47bd] px-3 text-xs leading-5">{index + 1}</span>
+        <span className="text-base leading-tight md:text-xl lg:text-2xl">{feature.title}</span>
+      </button>
+      <motion.div id={`product-description-${index}`} initial={false}
+        animate={{ height: open || reducedMotion ? 'auto' : 0, opacity: open || reducedMotion ? 1 : 0 }}
+        transition={{ duration: reducedMotion ? 0 : 0.3 }} className="overflow-hidden">
+        <p className="pb-4 text-sm leading-snug md:text-base">{feature.description}</p>
+      </motion.div>
+    </motion.article>
   );
 };
 
@@ -351,10 +232,10 @@ const PaymentFlowGrid: React.FC = () => {
     <section className="bg-[#faf7f2] py-20">
       <div
         ref={sectionRef}
-        className="mx-auto grid min-h-screen w-full max-w-[1320px] grid-cols-1 gap-4 overflow-hidden px-5 md:grid-cols-1 lg:grid-cols-2 lg:grid-rows-3"
+        className="mx-auto grid min-h-screen w-full max-w-[1320px] grid-cols-1 gap-4 overflow-hidden px-5 md:grid-cols-1 lg:grid-cols-2"
       >
         {flowCards.map((card, index) => {
-          const isTall = index === 0 || index === 2 || index === 5;
+          const isTall = index === 0;
           return (
             <motion.article
               key={card.title}

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Building2, Cpu, Globe2, Layers, ShieldCheck, Sparkles } from 'lucide-react';
 import atomArt from '../assets/payatom-ref/Atom.d12a4e49.webp';
 import ballArt from '../assets/payatom-ref/Ball.9ae2d805.webp';
+import { milestones } from '../lib/milestones';
 
 const solutionCards = [
   {
@@ -69,32 +70,12 @@ const securedCards: SecuredCardConfig[] = [
   },
 ];
 
-const journeyCards = [
-  {
-    year: '2015',
-    title: 'Foundation in Malaysia',
-    desc: 'Established SOLUTION ONE in Malaysia to pioneer next-gen payment infrastructure for digital enterprises.',
-    icon: Building2,
-  },
-  {
-    year: '2020',
-    title: 'Global Payment Gateway Launch',
-    desc: 'Launched full-scale PAYPAY Payment Gateway platform. Added support for UPI India UPI network. Reached 500+ active merchants using SOLUTION ONE product in India.',
-    icon: Layers,
-  },
-  {
-    year: '2022',
-    title: '$1 Billion Processed & Crypto Integration',
-    desc: 'Crossed $1 billion+ USD in total processing volume. Launched VFpay, enabling crypto-to-fiat merchant payments. Onboarded international clients to fully support in SEA/pacific regions.',
-    icon: Cpu,
-  },
-  {
-    year: '2024',
-    title: 'Global Partnerships',
-    desc: 'Established partnerships with leading liquidity providers and financial institutions across 40+ countries. Upgraded infrastructure for high-volume enterprise processing. Crossed $2 billion+ USD in single year processing volume.',
-    icon: Sparkles,
-  },
-];
+const journeyIcons = [Building2, Globe2, Layers, Cpu, Sparkles];
+const journeyCards = milestones.map((milestone, index) => ({
+  ...milestone,
+  desc: milestone.text,
+  icon: journeyIcons[index],
+}));
 
 const SecuredCard: React.FC<{ card: SecuredCardConfig; index: number }> = ({ card, index }) => (
   <motion.div
@@ -239,7 +220,7 @@ export const PaymentSolutions: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {journeyCards.map((card, index) => {
               const Icon = card.icon;
               return (

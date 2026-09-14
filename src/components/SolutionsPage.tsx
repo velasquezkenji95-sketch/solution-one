@@ -3,7 +3,6 @@ import { motion, type MotionValue, useScroll, useTransform } from 'framer-motion
 import { ArrowUpRight } from 'lucide-react';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
-import { Logo } from './Logo';
 import { publicAsset } from '../lib/routing';
 import atomAsset from '../assets/payatom-ref/Atom.d12a4e49.webp';
 import artboardAsset from '../assets/payatom-ref/Artboard.2edc3722.png';
@@ -208,7 +207,7 @@ const SecuredCards: React.FC = () => (
 
 const BusinessSection: React.FC = () => (
   <section className="bg-[#faf7f2] px-5 py-20 text-[#0b47bd] md:px-10 md:py-36">
-    <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 lg:flex-row">
+    <div className="mx-auto flex max-w-5xl flex-col items-center gap-16">
       <div className="w-full max-w-3xl">
         <h2 className="text-5xl font-medium leading-none md:text-7xl">Serving Global Digital Businesses</h2>
         <p className="mt-10 max-w-2xl text-2xl font-semibold leading-tight text-[#6f8fd9]">
@@ -232,40 +231,8 @@ const BusinessSection: React.FC = () => (
           ))}
         </div>
       </div>
-      <WalletMockup />
     </div>
   </section>
-);
-
-const WalletMockup: React.FC = () => (
-  <motion.div
-    initial={{ opacity: 0, x: 80, rotate: 3 }}
-    whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-    viewport={{ once: false, amount: 0.35 }}
-    transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-    className="relative w-full max-w-[400px] rounded-[2rem] bg-white p-6 shadow-[0_26px_80px_rgba(6,20,46,0.12)]"
-  >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <span className="grid size-10 place-items-center rounded-full bg-[#06142e]">
-          <span className="size-4 rounded-full bg-[#2b6fff] shadow-[0_0_14px_#6bcfff]" />
-        </span>
-        <span className="text-2xl font-bold text-[#06142e]">SOLUTION ONE</span>
-      </div>
-      <span className="text-2xl tracking-widest text-slate-300">...</span>
-    </div>
-    <h3 className="mt-10 text-3xl font-medium text-black">Wallet</h3>
-    <div className="mt-6 rounded-xl bg-gradient-to-br from-[#6bcfff] to-[#0b47bd] p-6 text-white shadow-[0_16px_38px_rgba(43,111,255,0.22)]">
-      <div className="flex justify-between text-sm font-semibold text-[#06142e]/55">
-        <span>.... 3346</span>
-        <span className="text-3xl italic text-[#06142e]/45">VISA</span>
-      </div>
-      <Logo className="mt-20 scale-125 origin-left" />
-    </div>
-    <p className="mt-3 text-sm font-semibold text-slate-300">Balance</p>
-    <p className="text-xl font-semibold text-slate-300">$24,249.07</p>
-    <div className="mt-20 rounded-xl bg-[#f4f0eb] p-5 text-3xl font-bold italic text-slate-300">VISA</div>
-  </motion.div>
 );
 
 const WhySolutions: React.FC = () => {

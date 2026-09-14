@@ -11,9 +11,9 @@ const reasons = [
       'Enjoy a simple signup process. We seamlessly handle KYC, AML, sanctions screening, and identity verification for you.',
   },
   {
-    title: 'Same-Day Settlements',
+    title: 'Same-Day settlement',
     description:
-      'Get paid on the same day or next day (T+0 or T+1), much faster than the standard T+2 in the industry.',
+      'Get paid on the same day D0, much faster than the standard T1 in the industry.',
   },
   {
     title: 'Top-Tier Security Measures',
@@ -58,11 +58,6 @@ const comparisonRows = [
     feature: 'Integrated Crypto Exchange',
     ours: ['Yes - natively built-in', 'tick'],
     other: ['Limited or non-existent', 'warning'],
-  },
-  {
-    feature: 'IBAN/Fiat Accounts',
-    ours: ['Yes - named IBANs and SEPA transactions supported', 'tick'],
-    other: ['Commonly restricted to EU/UK, not globally robust', 'warning'],
   },
   {
     feature: 'Third Party Payments',

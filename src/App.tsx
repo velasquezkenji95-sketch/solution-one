@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { UnifyCards } from './components/UnifyCards';
@@ -9,12 +10,13 @@ import { StatBanner } from './components/StatBanner';
 import { ContactPage, ContactSection } from './components/ContactSection';
 import { FAQSection } from './components/FAQSection';
 import { Footer } from './components/Footer';
-import { ProductsPage } from './components/ProductsPage';
-import { SolutionsPage } from './components/SolutionsPage';
-import { AboutPage } from './components/AboutPage';
 import { pagePathname } from './lib/routing';
 
-export function App() {
+const ProductsPage = lazy(() => import('./components/ProductsPage').then(module => ({ default: module.ProductsPage })));
+const SolutionsPage = lazy(() => import('./components/SolutionsPage').then(module => ({ default: module.SolutionsPage })));
+const AboutPage = lazy(() => import('./components/AboutPage').then(module => ({ default: module.AboutPage })));
+
+function Pages() {
   const pathname = pagePathname();
 
   if (pathname === '/products') {
@@ -54,6 +56,10 @@ export function App() {
       <Footer />
     </div>
   );
+}
+
+export function App() {
+  return <Suspense fallback={<div className="grid min-h-screen place-items-center bg-[#06142e] text-white" role="status">Loading...</div>}><Pages /></Suspense>;
 }
 
 export default App;

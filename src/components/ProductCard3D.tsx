@@ -1,0 +1,102 @@
+import { useEffect, useRef } from 'react';
+import type { MotionValue } from 'framer-motion';
+import * as THREE from 'three';
+import logoUrl from '../assets/Solution 1 Logo.png';
+import atomUrl from '../assets/payatom-ref/Atom.d12a4e49.webp';
+
+export function ProductCard3D({ progress, reducedMotion }: { progress: MotionValue<number>; reducedMotion: boolean }) {
+  const hostRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+    host.appendChild(renderer.domElement);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 30);
+    camera.position.set(0, 0, 8);
+    const surface = document.createElement('canvas');
+    surface.width = 1024;
+    surface.height = 646;
+    const ctx = surface.getContext('2d')!;
+    const gradient = ctx.createLinearGradient(0, 0, 200, 646);
+    gradient.addColorStop(0, '#b9e4ff');
+    gradient.addColorStop(0.45, '#287bfa');
+    gradient.addColorStop(1, '#0646b9');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 1024, 646);
+    ctx.fillStyle = '#ffffff35';
+    for (let x = 16; x < 1024; x += 22) for (let y = 16; y < 646; y += 22) ctx.fillRect(x, y, 2, 2);
+    const texture = new THREE.CanvasTexture(surface);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    const face = new THREE.MeshBasicMaterial({ map: texture });
+    const edge = new THREE.MeshStandardMaterial({ color: '#4695ff', metalness: 0.4, roughness: 0.45 });
+    const shape = new THREE.Shape();
+    const w = 3.6, h = 2.27, r = 0.08;
+    shape.moveTo(-w / 2 + r, -h / 2);
+    shape.lineTo(w / 2 - r, -h / 2);
+    shape.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
+    shape.lineTo(w / 2, h / 2 - r);
+    shape.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2);
+    shape.lineTo(-w / 2 + r, h / 2);
+    shape.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r);
+    shape.lineTo(-w / 2, -h / 2 + r);
+    shape.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+    const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.025, bevelEnabled: false, curveSegments: 10 });
+    const positions = geometry.getAttribute('position');
+    const uv = geometry.getAttribute('uv');
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, (positions.getX(i) + w / 2) / w, (positions.getY(i) + h / 2) / h);
+    const card = new THREE.Mesh(geometry, [face, edge]);
+    scene.add(card, new THREE.AmbientLight(0xffffff, 2));
+    let disposed = false;
+    const render = () => {
+      if (disposed) return;
+      const p = reducedMotion ? 0 : progress.get();
+      card.rotation.set(-0.08 * Math.sin(p * Math.PI * 2), p * Math.PI * 2, -0.04 * Math.cos(p * Math.PI * 2));
+      renderer.render(scene, camera);
+    };
+    const logo = new Image();
+    const atom = new Image();
+    atom.onload = () => {
+      if (disposed) return;
+      ctx.save();
+      ctx.filter = 'hue-rotate(-55deg)';
+      ctx.globalAlpha = 0.65;
+      ctx.drawImage(atom, 530, -125, 510, 570);
+      ctx.restore();
+      texture.needsUpdate = true;
+      render();
+    };
+    logo.onload = () => {
+      if (disposed) return;
+      ctx.save();
+      ctx.filter = 'brightness(0) invert(1)';
+      ctx.drawImage(logo, 50, 480, 540, 540 * logo.height / logo.width);
+      ctx.restore();
+      texture.needsUpdate = true;
+      render();
+    };
+    atom.src = atomUrl;
+    logo.src = logoUrl;
+    const resize = () => {
+      const width = host.clientWidth, height = host.clientHeight;
+      camera.aspect = width / height;
+      camera.position.z = camera.aspect < 1.2 ? 10 : 8;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      render();
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(host);
+    const unsubscribe = progress.on('change', render);
+    resize();
+    return () => {
+      disposed = true;
+      unsubscribe();
+      observer.disconnect();
+      geometry.dispose(); texture.dispose(); face.dispose(); edge.dispose(); renderer.dispose();
+      renderer.domElement.remove();
+    };
+  }, [progress, reducedMotion]);
+  return <div ref={hostRef} data-product-artwork role="img" aria-label="Solution One payment card rotating with scroll" className="h-full w-full" />;
+}

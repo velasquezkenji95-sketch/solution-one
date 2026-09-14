@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Lottie } from 'lottie-react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { Lottie, type LottieHandle } from 'lottie-react';
 import { Landmark, WalletCards, Coins, Send, Globe2 } from 'lucide-react';
 import networkAnimation from '../assets/payatom-network-lottie.json';
 
@@ -8,12 +8,30 @@ const cards = [
   { title: 'Unified Gateway', eyebrow: 'Payment Gateway', desc: 'Accept all global payment methods seamlessly.', icon: WalletCards },
   { title: 'Crypto Gateway', eyebrow: 'Crypto Ready', desc: 'USDT, BTC, ETH multi-asset engine.', icon: Coins },
   { title: 'Instant Payouts', eyebrow: 'Payouts', desc: 'Global vendor and affiliate distributions.', icon: Send },
-  { title: 'D0 Speed', eyebrow: 'Settlement', desc: 'Same-day settlement for liquidity optimization.', icon: Landmark },
+  { title: 'Same-Day settlement', eyebrow: 'Settlement', desc: 'Get paid on the same day D0, much faster than the standard T1 in the industry.', icon: Landmark },
   { title: 'Custom API', eyebrow: 'Enterprise', desc: 'High-volume 24x7 support infrastructure.', icon: Globe2 },
 ];
 
 export const UnifyCards: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const networkRef = useRef<HTMLElement>(null);
+  const animationRef = useRef<LottieHandle | null>(null);
+  const networkVisible = useInView(networkRef, { amount: 0.05 });
+  const reducedMotion = useReducedMotion();
+
+  const syncPlayback = useCallback(() => {
+    if (reducedMotion) {
+      animationRef.current?.pause();
+      animationRef.current?.seek({ percent: 100 });
+    } else if (networkVisible && !document.hidden) animationRef.current?.play();
+    else animationRef.current?.pause();
+  }, [networkVisible, reducedMotion]);
+
+  useEffect(() => {
+    syncPlayback();
+    document.addEventListener('visibilitychange', syncPlayback);
+    return () => document.removeEventListener('visibilitychange', syncPlayback);
+  }, [syncPlayback]);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start 20%', 'end 80%'],
@@ -42,7 +60,7 @@ export const UnifyCards: React.FC = () => {
 
   return (
     <div id="unify" className="relative w-full bg-[#faf7f2] text-[#2563eb]">
-      <section className="relative w-full min-h-screen overflow-hidden px-5 pt-20 pb-14">
+      <section ref={networkRef} className="relative w-full min-h-screen overflow-hidden px-5 pt-20 pb-14">
         <h2 className="relative z-10 text-[clamp(2.2rem,4.4vw,4.4rem)] font-semibold tracking-tight leading-[1.02] max-w-6xl mx-auto text-center">
           SOLUTION ONE is the global payments network uniting merchants with seamless transaction access worldwide.
         </h2>
@@ -50,7 +68,10 @@ export const UnifyCards: React.FC = () => {
         <div className="relative mx-auto -mt-7 h-[min(70svh,700px)] min-h-[520px] max-w-[1220px] overflow-visible md:-mt-10">
           <Lottie
             src={networkAnimation}
-            autoplay
+            autoplay={false}
+            speed={1.2}
+            lottieRef={animationRef}
+            subscriptions={{ ready: syncPlayback }}
             loop={false}
             className="absolute left-1/2 top-1/2 h-[920px] w-[1200px] max-w-none -translate-x-1/2 -translate-y-[45%] md:-translate-y-[46%] [filter:hue-rotate(-42deg)_saturate(1.18)]"
             rendererSettings={{ preserveAspectRatio: 'xMidYMid meet' }}
@@ -77,9 +98,9 @@ export const UnifyCards: React.FC = () => {
                 <motion.div
                   key={card.title}
                   style={{ x, y, opacity: cardOpacity, zIndex: index + 1 }}
-                  className="absolute pointer-events-auto w-[40vw] md:w-[25vw] lg:w-[12.5vw] aspect-square rounded-[2rem] bg-white p-3 shadow-2xl border border-blue-100 overflow-hidden"
+                  className="absolute pointer-events-auto w-[40vw] min-w-[220px] md:w-[25vw] lg:w-[12.5vw] min-h-[300px] rounded-[2rem] bg-white p-3 shadow-2xl border border-blue-100 overflow-hidden"
                 >
-                  <div className="h-full rounded-[1.5rem] bg-gradient-to-b from-[#0f46d9] to-[#38bdf8] p-4 text-white flex flex-col justify-between">
+                  <div className="min-h-[276px] rounded-[1.5rem] bg-gradient-to-b from-[#0f46d9] to-[#38bdf8] p-4 text-white flex flex-col justify-between gap-3">
                     <span className="text-xs font-bold uppercase opacity-80">{card.eyebrow}</span>
                     <Icon className="w-8 h-8" />
                     <div>
