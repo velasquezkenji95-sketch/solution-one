@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform }
 import { ArrowRightLeft, Coins, CreditCard, Send, ShieldCheck } from 'lucide-react';
 import atomArt from '../assets/payatom-ref/Artboard.2edc3722.png';
 import logo from '../assets/Solution 1 Logo.png';
+import { useAnimationPlayback } from '../lib/useAnimationPlayback';
 
 const features = [
   {
@@ -49,6 +50,9 @@ const features = [
 
 export const ProductFeatures: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const artworkRef = useRef<HTMLDivElement>(null);
+  const artworkPlaying = useAnimationPlayback(artworkRef);
+  const scrollIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const visibleFeatures = features.slice(0, activeIndex + 1);
@@ -69,33 +73,36 @@ export const ProductFeatures: React.FC = () => {
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const nextIndex = Math.min(features.length - 1, Math.max(0, Math.floor(latest * features.length)));
-    setActiveIndex(nextIndex);
+    if (scrollIndex.current !== nextIndex) {
+      scrollIndex.current = nextIndex;
+      setActiveIndex(nextIndex);
+    }
   });
 
   return (
-    <section ref={sectionRef} id="products" className="relative z-20 h-[520svh] w-full bg-[#faf7f2] text-[#0f46d9]">
+    <section ref={sectionRef} id="products" style={{ overflowAnchor: 'none' }} className="relative z-20 h-[520svh] w-full bg-[#faf7f2] text-[#0f46d9]">
       <div className="sticky top-0 h-svh w-full overflow-hidden bg-[#faf7f2] px-5 pt-[14svh] md:px-10">
         <h2 className="text-[clamp(2.4rem,4.5vw,5rem)] font-semibold leading-none tracking-tight">
           Product Features
         </h2>
 
         <div className="mt-[9svh] grid h-[58svh] grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_1px_0.86fr] lg:gap-16">
-          <div className="relative hidden h-full items-center justify-center overflow-visible lg:flex">
+          <div ref={artworkRef} data-home-feature-artwork data-animation-playing={artworkPlaying} className="relative hidden h-full items-center justify-center overflow-visible lg:flex">
             <motion.div
-              style={{ y: previewY, rotate: previewRotate }}
+              style={{ y: previewY, rotate: previewRotate, willChange: artworkPlaying ? 'transform' : 'auto' }}
               className="relative aspect-[1.58] w-[min(34vw,520px)] overflow-hidden rounded-lg bg-gradient-to-br from-[#77b9ff] via-[#2c74ff] to-[#0a2b9c] shadow-[0_36px_110px_rgba(15,70,217,0.24)]"
             >
-              <motion.div style={{ x: glowX }} className="absolute inset-y-0 left-1/4 w-1/2 bg-white/45 blur-3xl" />
+              <motion.div style={{ x: glowX }} className="absolute inset-y-0 left-1/4 w-1/2 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent)]" />
               <motion.img
                 src={atomArt}
                 alt=""
-                animate={{ rotate: [0, 8, 0], scale: [1, 1.05, 1] }}
+                animate={artworkPlaying ? { rotate: [0, 8, 0], scale: [1, 1.05, 1] } : { rotate: 0, scale: 1 }}
                 transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
                 className="absolute -right-10 -top-20 w-[58%] opacity-55 saturate-150 hue-rotate-[190deg]"
               />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_15%,rgba(255,255,255,0.55),transparent_20%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(0,13,64,0.24))]" />
               <img src={logo} alt="Solution One" className="absolute bottom-8 left-7 w-56 max-w-[48%] brightness-0 invert" />
-              <div className="absolute bottom-8 right-8 flex size-16 items-center justify-center rounded-full bg-white/18 text-white backdrop-blur-md">
+              <div className="absolute bottom-8 right-8 flex size-16 items-center justify-center rounded-full bg-white/18 text-white">
                 <ActiveIcon className="size-8" />
               </div>
             </motion.div>
@@ -143,7 +150,7 @@ export const ProductFeatures: React.FC = () => {
             </motion.div>
 
             <motion.div
-              animate={{ y: [-5, 5, -5] }}
+              animate={artworkPlaying ? { y: [-5, 5, -5] } : { y: 0 }}
               transition={{ duration: 4.6, repeat: Infinity, ease: 'easeInOut' }}
               className="absolute left-[12%] bottom-[5%] rounded-lg bg-[#15243b] px-7 py-8 text-white shadow-[0_24px_80px_rgba(15,70,217,0.2)]"
             >
@@ -154,7 +161,7 @@ export const ProductFeatures: React.FC = () => {
 
           <div className="hidden h-[78%] w-px bg-blue-300/70 lg:block" />
 
-          <div className="flex max-h-full flex-col justify-center overflow-hidden">
+          <div className="flex max-h-full flex-col overflow-y-auto overscroll-contain lg:justify-center">
             <AnimatePresence initial={false}>
             {visibleFeatures.map((item, index) => {
               const isOpen = displayIndex === index;
@@ -164,25 +171,25 @@ export const ProductFeatures: React.FC = () => {
                 <motion.button
                   key={item.id}
                   type="button"
-                  initial={{ opacity: 0, y: 42, height: 0 }}
-                  animate={{ opacity: 1, y: 0, height: 'auto' }}
-                  exit={{ opacity: 0, y: 42, height: 0 }}
+                  initial={{ opacity: 0, y: 28 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 28 }}
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   onMouseEnter={() => setHoverIndex(index)}
                   onMouseLeave={() => setHoverIndex(null)}
                   onFocus={() => setHoverIndex(index)}
                   onBlur={() => setHoverIndex(null)}
-                  onClick={() => setActiveIndex(index)}
-                  className="group border-t border-blue-300 py-4 text-left transition-colors last:border-b"
+                  onClick={() => setHoverIndex(index)}
+                  className="group shrink-0 border-t border-blue-300 py-2 text-left transition-colors last:border-b lg:py-4"
                 >
-                  <div className="flex items-start gap-5">
-                    <div className={`mt-1 flex h-7 w-14 shrink-0 items-center justify-evenly rounded-full border text-sm transition-colors ${isOpen ? 'border-[#0f46d9] bg-[#0f46d9] text-white' : 'border-[#0f46d9] text-[#0f46d9]'}`}>
+                  <div className="flex items-start gap-3 lg:gap-5">
+                    <div className={`mt-1 flex h-7 w-10 shrink-0 items-center justify-evenly rounded-full border text-sm transition-colors lg:w-14 ${isOpen ? 'border-[#0f46d9] bg-[#0f46d9] text-white' : 'border-[#0f46d9] text-[#0f46d9]'}`}>
                       <span className={`size-2 rounded-full ${isOpen ? 'bg-white' : 'bg-[#0f46d9]'}`} />
                       <span>{item.id}</span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="mb-1 text-xs font-bold uppercase tracking-[0.2em]">{item.kicker}</p>
-                      <h3 className={`text-2xl font-medium leading-tight tracking-tight transition-opacity ${isOpen ? 'opacity-100' : 'opacity-55 group-hover:opacity-100'}`}>
+                      <p className="mb-1 text-[10px] font-bold uppercase tracking-normal lg:text-xs">{item.kicker}</p>
+                      <h3 className={`text-lg font-medium leading-tight tracking-normal transition-opacity lg:text-2xl ${isOpen ? 'opacity-100' : 'opacity-55 group-hover:opacity-100'}`}>
                         {item.title}
                       </h3>
                       <AnimatePresence initial={false}>
@@ -192,7 +199,7 @@ export const ProductFeatures: React.FC = () => {
                             animate={{ height: 'auto', opacity: 1, y: 0 }}
                             exit={{ height: 0, opacity: 0, y: -8 }}
                             transition={{ duration: 0.25 }}
-                            className="mt-3 overflow-hidden text-base leading-snug text-[#0b2d86]"
+                            className="mt-2 overflow-hidden text-sm leading-snug text-[#0b2d86] lg:mt-3 lg:text-base"
                           >
                             {item.desc}
                           </motion.p>

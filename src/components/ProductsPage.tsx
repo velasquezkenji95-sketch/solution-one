@@ -7,6 +7,7 @@ import { Footer } from './Footer';
 import { Logo } from './Logo';
 import { publicAsset } from '../lib/routing';
 import { ProductCard3D } from './ProductCard3D';
+import { AnimatedVideo } from './AnimatedVideo';
 import flowAnimation from '../assets/payatom-product-lotties/anim-24660.json';
 import integrationAnimation from '../assets/payatom-product-lotties/anim-34903.json';
 
@@ -83,7 +84,7 @@ const ProductsHero: React.FC = () => (
   <section className="relative z-10 flex h-[100svh] w-full flex-col items-start justify-end gap-5 overflow-hidden bg-[#05000d] px-5 pb-15 text-white md:gap-10 md:px-10">
     <Navbar />
     <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-b from-black from-0% via-[#06142e] to-[#2b6fff]">
-      <video
+      <AnimatedVideo
         src={heroVideo}
         poster={heroPoster}
         autoPlay
@@ -328,7 +329,7 @@ const ProductsCta: React.FC = () => (
       </motion.h2>
       <div className="relative flex w-full items-center justify-center">
         <div className="absolute flex h-full w-full scale-105 items-center justify-center rounded-full border-[14px] border-[#faf7f2] max-lg:size-60" />
-        <video
+        <AnimatedVideo
           src={publicAsset('/product-assets/sphere.mp4')}
           autoPlay
           loop

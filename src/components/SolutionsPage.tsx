@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, type MotionValue, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Navbar } from './Navbar';
+import { AnimatedVideo } from './AnimatedVideo';
 import { Footer } from './Footer';
 import { publicAsset } from '../lib/routing';
 import atomAsset from '../assets/payatom-ref/Atom.d12a4e49.webp';
@@ -70,7 +71,7 @@ const tailoredCards = [
 const SolutionsHero: React.FC = () => (
   <section className="relative mb-16 flex h-[100svh] w-full flex-col items-start justify-end overflow-hidden bg-black px-5 pb-16 text-white md:px-10">
     <Navbar />
-    <video
+    <AnimatedVideo
       src={publicAsset('/solution-assets/SolutionsHero.mp4')}
       poster={publicAsset('/solution-assets/solution-poster.png')}
       autoPlay
@@ -315,7 +316,7 @@ const TailoredSolutions: React.FC = () => (
           className={`w-full max-w-[350px] overflow-hidden rounded-[1.6rem] p-3 pb-8 text-white shadow-[0_18px_45px_rgba(6,20,46,0.22)] ${card.align}`}
           style={{ backgroundColor: card.color, marginTop: index === 0 ? 64 : 0 }}
         >
-          <video src={card.video} autoPlay loop muted playsInline className="h-[250px] w-full rounded-[1.1rem] object-cover" />
+          <AnimatedVideo src={card.video} autoPlay loop muted playsInline className="h-[250px] w-full rounded-[1.1rem] object-cover" />
           <h3 className="mt-6 px-2 text-3xl font-bold leading-none">{card.title}</h3>
           <p className="mt-6 px-2 text-base font-semibold leading-relaxed">{card.text}</p>
         </motion.article>

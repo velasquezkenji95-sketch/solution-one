@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, extend, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { useInView } from 'framer-motion';
 import ThreeGlobe from 'three-globe';
 import { Color, Fog, PerspectiveCamera, Scene, Vector3 } from 'three';
 import type { FeatureCollection } from 'geojson';
 import countries from '../assets/ne_110m_admin_0_countries.json';
+import { useAnimationPlayback } from '../lib/useAnimationPlayback';
 
 extend({ ThreeGlobe });
 
@@ -122,7 +124,7 @@ function randomIndexes(min: number, max: number, count: number) {
   return selected;
 }
 
-const GlobeRenderer: React.FC = () => {
+const GlobeRenderer: React.FC<{ playing: boolean }> = ({ playing }) => {
   const globeRef = useRef<InstanceType<typeof ThreeGlobe> | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -186,7 +188,7 @@ const GlobeRenderer: React.FC = () => {
   }, [points, ready]);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !playing) return;
     const interval = window.setInterval(() => {
       const indexes = randomIndexes(0, globeArcs.length, Math.floor((globeArcs.length * 4) / 5));
       const rings: GlobeRing[] = globeArcs
@@ -196,7 +198,14 @@ const GlobeRenderer: React.FC = () => {
     }, 2000);
 
     return () => window.clearInterval(interval);
-  }, [ready]);
+  }, [ready, playing]);
+
+  useEffect(() => {
+    if (!ready) return;
+    if (playing) globeRef.current?.resumeAnimation();
+    else globeRef.current?.pauseAnimation();
+    return () => { globeRef.current?.pauseAnimation(); };
+  }, [ready, playing]);
 
   return globeRef.current ? <primitive object={globeRef.current} /> : null;
 };
@@ -205,7 +214,6 @@ const RendererConfig: React.FC = () => {
   const { gl, size } = useThree();
 
   useEffect(() => {
-    gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffaaff, 0);
   }, [gl, size.height, size.width]);
@@ -214,6 +222,10 @@ const RendererConfig: React.FC = () => {
 };
 
 export const PayatomWorld: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const playing = useAnimationPlayback(ref);
+  const hasEntered = useInView(ref, { once: true, margin: '400px' });
+  const camera = useMemo(() => new PerspectiveCamera(50, 1.2, 180, 1800), []);
   const scene = useMemo(() => {
     const nextScene = new Scene();
     nextScene.fog = new Fog(0xffffff, 400, 2000);
@@ -221,23 +233,25 @@ export const PayatomWorld: React.FC = () => {
   }, []);
 
   return (
-    <Canvas scene={scene} camera={new PerspectiveCamera(50, 1.2, 180, 1800)}>
+    <div ref={ref} className="h-full w-full" data-globe-playing={playing}>
+    {hasEntered && <Canvas scene={scene} camera={camera} dpr={[1, 1.5]} frameloop={playing ? 'always' : 'never'}>
       <RendererConfig />
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight color={globeConfig.directionalLeftLight} position={new Vector3(-400, 100, 400)} />
       <directionalLight color={globeConfig.directionalTopLight} position={new Vector3(-200, 500, 200)} />
       <pointLight color={globeConfig.pointLight} position={new Vector3(-200, 500, 200)} intensity={0.8} />
-      <GlobeRenderer />
+      <GlobeRenderer playing={playing} />
       <OrbitControls
         enablePan={false}
         enableZoom={false}
         minDistance={300}
         maxDistance={300}
-        autoRotate
+        autoRotate={playing}
         autoRotateSpeed={globeConfig.autoRotateSpeed}
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI - Math.PI / 3}
       />
-    </Canvas>
+    </Canvas>}
+    </div>
   );
 };

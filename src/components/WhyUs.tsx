@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, MotionValue, useScroll, useTransform } from 'framer-motion';
 import { Footer } from './Footer';
 import { Navbar } from './Navbar';
+import { AnimatedVideo } from './AnimatedVideo';
 import { publicAsset } from '../lib/routing';
 
 const reasons = [
@@ -202,7 +203,7 @@ export const WhyUs: React.FC = () => {
 const WhyUsHero = () => (
   <section className="relative flex min-h-svh items-end overflow-hidden bg-[#1c0d40] px-5 py-16 text-white md:px-10">
     <Navbar />
-    <video
+    <AnimatedVideo
       className="absolute inset-0 h-full w-full object-cover"
       src={publicAsset('/Hero/Hero.mp4')}
       autoPlay

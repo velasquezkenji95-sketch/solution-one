@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useAnimationPlayback } from '../lib/useAnimationPlayback';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Building2, Cpu, Globe2, Layers, ShieldCheck, Sparkles } from 'lucide-react';
 import atomArt from '../assets/payatom-ref/Atom.d12a4e49.webp';
@@ -77,8 +78,12 @@ const journeyCards = milestones.map((milestone, index) => ({
   icon: journeyIcons[index],
 }));
 
-const SecuredCard: React.FC<{ card: SecuredCardConfig; index: number }> = ({ card, index }) => (
+const SecuredCard: React.FC<{ card: SecuredCardConfig; index: number }> = ({ card, index }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const playing = useAnimationPlayback(ref);
+  return (
   <motion.div
+    ref={ref}
     initial={{ opacity: 0, y: 26 }}
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -18 }}
@@ -100,18 +105,21 @@ const SecuredCard: React.FC<{ card: SecuredCardConfig; index: number }> = ({ car
                           aria-hidden="true"
                           className={card.imageClassName}
                           style={card.imageStyle}
-                          animate={{ y: [0, -10, 0], rotate: [-1, 1, -1] }}
+                          animate={playing ? { y: [0, -10, 0], rotate: [-1, 1, -1] } : { y: 0, rotate: 0 }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
       />
     )}
   </motion.div>
-);
+  );
+};
 
 export const PaymentSolutions: React.FC = () => {
+  const ref = useRef<HTMLElement>(null);
+  const playing = useAnimationPlayback(ref);
   const [activeCategory, setActiveCategory] = useState<'360' | 'Secured'>('360');
 
   return (
-    <section id="about" className="relative w-full overflow-hidden bg-[#faf7f2] text-[#0b2d86]">
+    <section ref={ref} id="about" className="relative w-full overflow-hidden bg-[#faf7f2] text-[#0b2d86]">
       <div className="relative z-10 h-full w-full max-md:-mt-[18%]">
         <div className="mx-auto flex w-full max-w-[860px] flex-col items-center gap-5 px-5 pb-20 max-md:min-h-screen">
           <h1 className="text-3xl font-semibold tracking-normal md:text-4xl lg:text-6xl">
@@ -177,7 +185,7 @@ export const PaymentSolutions: React.FC = () => {
                             {[0, 1, 2, 3].map((ball) => (
                               <motion.div
                                 key={ball}
-                                animate={{ x: ['50%', '35%', '50%'], y: ['-20%', '-30%', '-20%'] }}
+                                animate={playing ? { x: ['50%', '35%', '50%'], y: ['-20%', '-30%', '-20%'] } : { x: '50%', y: '-20%' }}
                                 transition={{ duration: 3.2 + ball * 0.2, repeat: Infinity, ease: 'easeInOut' }}
                                 className="absolute h-32 w-32 rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffffff,#60d5ff_35%,#063cbb_75%)]"
                                 style={{ left: `${ball * 12}%`, zIndex: 4 - ball, filter: `blur(${ball * 3}px)` }}

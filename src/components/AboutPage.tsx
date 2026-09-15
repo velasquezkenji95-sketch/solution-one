@@ -1,4 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import type { Application } from '@splinetool/runtime';
+import { useAnimationPlayback } from '../lib/useAnimationPlayback';
 import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
 import { ArrowUpRight } from 'lucide-react';
@@ -59,11 +61,22 @@ const investorRows = [
   ['05.', 'Innovative, Integrated Ecosystem', 'Payment technology, crypto-fiat bridges, and enterprise-grade infrastructure come together to support business growth.'],
 ] as const;
 
-const AboutHero: React.FC = () => (
-  <section className="relative flex h-[100svh] items-end overflow-hidden bg-[#06142e] px-5 pb-16 text-white md:px-10">
+const AboutHero: React.FC = () => {
+  const ref = useRef<HTMLElement>(null);
+  const playing = useAnimationPlayback(ref);
+  const [scene, setScene] = useState<Application | null>(null);
+  useEffect(() => {
+    if (!scene) return;
+    if (playing) scene.play();
+    else scene.stop();
+  }, [scene, playing]);
+  return (
+  <section ref={ref} data-scene-playback={playing ? 'playing' : 'paused'} className="relative flex h-[100svh] items-end overflow-hidden bg-[#06142e] px-5 pb-16 text-white md:px-10">
     <Navbar />
     <div className="absolute inset-0 z-0 flex items-center justify-center bg-[#06142e]">
       <Spline
+        onLoad={setScene}
+        renderOnDemand
         scene={publicAsset('/about-assets/scene.splinecode')}
         className="h-full w-full object-cover [filter:hue-rotate(195deg)_saturate(1.2)]"
       />
@@ -75,7 +88,8 @@ const AboutHero: React.FC = () => (
       </p>
     </div>
   </section>
-);
+  );
+};
 
 const Timeline: React.FC = () => (
   <section className="bg-[#06142e] text-[#0b47bd]">
