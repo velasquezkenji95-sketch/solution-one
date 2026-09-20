@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Check, ChevronDown, Cpu, CreditCard, Users } from 'lucide-react';
 import atomArt from '../assets/payatom-ref/Artboard.2edc3722.png';
 import logo from '../assets/Solution 1 Logo.png';
@@ -38,12 +38,13 @@ const features = [
 export const ProductFeatures: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const artworkRef = useRef<HTMLDivElement>(null);
-  const artworkPlaying = useAnimationPlayback(artworkRef);
+  const reducedMotion = useReducedMotion();
+  const artworkPlaying = useAnimationPlayback(artworkRef) && !reducedMotion;
   const scrollIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const visibleFeatures = features.slice(0, activeIndex + 1);
-  const displayIndex = Math.min(hoverIndex ?? activeIndex, visibleFeatures.length - 1);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const visibleFeatures = reducedMotion ? features : features.slice(0, activeIndex + 1);
+  const displayIndex = Math.min(selectedIndex ?? activeIndex, visibleFeatures.length - 1);
   const activeFeature = features[displayIndex];
   const ActiveIcon = activeFeature.icon;
 
@@ -63,11 +64,12 @@ export const ProductFeatures: React.FC = () => {
     if (scrollIndex.current !== nextIndex) {
       scrollIndex.current = nextIndex;
       setActiveIndex(nextIndex);
+      setSelectedIndex(null);
     }
   });
 
   return (
-    <section ref={sectionRef} id="products" style={{ overflowAnchor: 'none' }} className="relative z-20 h-[520svh] w-full bg-[#faf7f2] text-[#0f46d9]">
+    <section ref={sectionRef} id="products" style={{ overflowAnchor: 'none' }} className="relative z-20 h-[200svh] w-full bg-[#faf7f2] text-[#0f46d9]">
       <div className="sticky top-0 h-svh w-full overflow-hidden bg-[#faf7f2] px-5 pt-[14svh] md:px-10">
         <h2 className="text-[clamp(2.4rem,4.5vw,5rem)] font-semibold leading-none tracking-tight">
           Product Features
@@ -104,10 +106,6 @@ export const ProductFeatures: React.FC = () => {
             </motion.div>
 
             <motion.div
-              key={displayIndex}
-              initial={{ opacity: 0, scale: 0.94, x: 28 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
               className="absolute bottom-[6%] right-[9%] w-[min(22vw,300px)] rounded-lg bg-white p-5 shadow-[0_30px_80px_rgba(15,70,217,0.16)]"
             >
               <div className="mb-5 flex items-center gap-2 rounded-full bg-slate-100 px-4 py-3 text-sm text-slate-400">
@@ -148,8 +146,7 @@ export const ProductFeatures: React.FC = () => {
 
           <div className="hidden h-[78%] w-px bg-blue-300/70 lg:block" />
 
-          <div className="home-feature-list flex max-h-full flex-col overflow-y-auto overscroll-contain">
-            <AnimatePresence initial={false}>
+          <div className="home-feature-list flex max-h-full flex-col overflow-y-auto">
             {visibleFeatures.map((item, index) => {
               const isOpen = displayIndex === index;
               const Icon = item.icon;
@@ -157,12 +154,10 @@ export const ProductFeatures: React.FC = () => {
               return (
                 <motion.article
                   key={item.id}
-                  initial={{ opacity: 0, y: 28 }}
+                  layout={reducedMotion ? false : 'position'}
+                  initial={reducedMotion ? false : { opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 28 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  onMouseEnter={() => setHoverIndex(index)}
-                  onMouseLeave={() => setHoverIndex(null)}
+                  transition={{ duration: reducedMotion ? 0 : 0.24, ease: [0.22, 1, 0.36, 1] }}
                   style={{ '--feature-accent': item.accent } as React.CSSProperties}
                   className={`home-feature-row group shrink-0 ${isOpen ? 'is-open' : ''}`}
                 >
@@ -171,9 +166,8 @@ export const ProductFeatures: React.FC = () => {
                     type="button"
                     aria-expanded={isOpen}
                     aria-controls={`home-feature-services-${item.id}`}
-                    onFocus={() => setHoverIndex(index)}
-                    onBlur={() => setHoverIndex(null)}
-                    onClick={() => setHoverIndex(index)}
+                    onFocus={() => setSelectedIndex(index)}
+                    onClick={() => setSelectedIndex(index)}
                     className="home-feature-trigger"
                   >
                     <span className="home-feature-icon"><Icon size={22} aria-hidden="true" /></span>
@@ -186,24 +180,20 @@ export const ProductFeatures: React.FC = () => {
                     <ChevronDown className="home-feature-chevron" size={18} aria-hidden="true" />
                   </button>
                   </h3>
-                      <AnimatePresence initial={false}>
                         {isOpen && (
                           <motion.ul
                             id={`home-feature-services-${item.id}`}
-                            initial={{ height: 0, opacity: 0, y: -8 }}
-                            animate={{ height: 'auto', opacity: 1, y: 0 }}
-                            exit={{ height: 0, opacity: 0, y: -8 }}
-                            transition={{ duration: 0.25 }}
+                            initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: reducedMotion ? 0 : 0.2 }}
                             className="home-feature-services"
                           >
                             {item.services.map(service => <li key={service}><Check size={14} aria-hidden="true" /><span>{service}</span></li>)}
                           </motion.ul>
                         )}
-                      </AnimatePresence>
                 </motion.article>
               );
             })}
-            </AnimatePresence>
           </div>
         </div>
       </div>
