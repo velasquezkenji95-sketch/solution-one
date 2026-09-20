@@ -15,9 +15,19 @@ import { pagePathname } from './lib/routing';
 const ProductsPage = lazy(() => import('./components/ProductsPage').then(module => ({ default: module.ProductsPage })));
 const SolutionsPage = lazy(() => import('./components/SolutionsPage').then(module => ({ default: module.SolutionsPage })));
 const AboutPage = lazy(() => import('./components/AboutPage').then(module => ({ default: module.AboutPage })));
+const TechnologyPage = lazy(() => import('./components/TechnologyPage').then(module => ({ default: module.TechnologyPage })));
+const OperationsPage = lazy(() => import('./components/OperationsPage').then(module => ({ default: module.OperationsPage })));
 
 function Pages() {
   const pathname = pagePathname();
+
+  if (pathname === '/operations') {
+    return <OperationsPage />;
+  }
+
+  if (pathname === '/technology') {
+    return <TechnologyPage />;
+  }
 
   if (pathname === '/products') {
     return <ProductsPage />;

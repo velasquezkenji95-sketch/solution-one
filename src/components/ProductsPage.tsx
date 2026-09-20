@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Lottie, type LottieHandle } from 'lottie-react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Globe2 } from 'lucide-react';
 import { motion, type MotionValue, useInView, useMotionValue, useReducedMotion, useScroll } from 'framer-motion';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
@@ -8,6 +8,7 @@ import { Logo } from './Logo';
 import { publicAsset } from '../lib/routing';
 import { ProductCard3D } from './ProductCard3D';
 import { AnimatedVideo } from './AnimatedVideo';
+import { PaymentCoverage } from './PaymentCoverage';
 import flowAnimation from '../assets/payatom-product-lotties/anim-24660.json';
 import integrationAnimation from '../assets/payatom-product-lotties/anim-34903.json';
 
@@ -81,9 +82,9 @@ const flowCards = [
 ];
 
 const ProductsHero: React.FC = () => (
-  <section className="relative z-10 flex h-[100svh] w-full flex-col items-start justify-end gap-5 overflow-hidden bg-[#05000d] px-5 pb-15 text-white md:gap-10 md:px-10">
+  <section className="payment-hero relative z-10 flex h-[100svh] w-full flex-col items-start justify-end gap-5 overflow-hidden bg-[#05000d] px-5 pb-28 text-white md:gap-6 md:px-10">
     <Navbar />
-    <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-b from-black from-0% via-[#06142e] to-[#2b6fff]">
+    <div className="absolute inset-0 z-0 h-full w-full bg-black">
       <AnimatedVideo
         src={heroVideo}
         poster={heroPoster}
@@ -91,17 +92,26 @@ const ProductsHero: React.FC = () => (
         loop
         muted
         playsInline
-        className="absolute inset-0 h-full w-full object-cover opacity-90"
+        className="payment-hero-video"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-[#2b6fff]/12" />
+      <div className="payment-hero-shade absolute inset-0" />
     </div>
+    <motion.div
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
+      className="payment-hero-slogan pointer-events-none absolute inset-x-5 z-10 text-center text-white"
+    >
+      <p className="payment-hero-eyebrow"><span /><Globe2 size={18} aria-hidden="true" />GLOBAL COVERAGE<span /></p>
+      <p className="payment-hero-message">One Partner. <span>Multiple Markets.</span></p>
+    </motion.div>
     <motion.h1
       initial={{ opacity: 0, y: 34 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       className="pointer-events-none relative z-10 text-4xl font-semibold leading-none tracking-tight md:text-5xl lg:text-7xl"
     >
-      Products
+      PAYMENT
     </motion.h1>
     <motion.p
       initial={{ opacity: 0, y: 28 }}
@@ -377,6 +387,7 @@ export const ProductsPage: React.FC = () => (
   <div className="min-h-screen bg-[#faf7f2] text-[#0b47bd] selection:bg-[#2b6fff] selection:text-white">
     <main>
       <ProductsHero />
+      <PaymentCoverage />
       <ProductFeatureScroller />
       <Infrastructure />
       <PaymentFlowGrid />

@@ -1,7 +1,8 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import type { Application } from '@splinetool/runtime';
-import { publicAsset } from '../lib/routing';
+import { publicAsset, withBasePath } from '../lib/routing';
+import { ArrowUpRight, Globe2, Cpu, Users } from 'lucide-react';
 
 const Spline = lazy(() => import('@splinetool/react-spline'));
 
@@ -18,7 +19,17 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-export const Hero: React.FC = () => {
+type HeroProps = {
+  title?: React.ReactNode;
+  description?: string;
+  showServices?: boolean;
+};
+
+export const Hero: React.FC<HeroProps> = ({
+  title = <>One Platform. <br /> Infinite Payment Possibilities</>,
+  description = 'SOLUTION ONE is a global fintech company empowering businesses to accept and process payments seamlessly across 40+ countries with secure, scalable, and compliant technology.',
+  showServices = true,
+}) => {
   const isMobile = useIsMobile();
   const reducedMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
@@ -62,17 +73,37 @@ export const Hero: React.FC = () => {
       </div>
       <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,transparent_28%,rgba(0,0,0,0.7)_100%)]" />
 
+      {showServices && <motion.nav
+        aria-label="Our services"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reducedMotion ? 0 : 0.55, delay: reducedMotion ? 0 : 0.18, ease: 'easeOut' }}
+        className="hero-services"
+      >
+        {[
+          { title: 'Global Payment', detail: 'Move money across markets.', path: '/products/', Icon: Globe2 },
+          { title: 'Technology', detail: 'Build. Connect. Scale.', path: '/technology/', Icon: Cpu },
+          { title: 'Operations Solutions', detail: 'People behind your growth.', path: '/operations/', Icon: Users },
+        ].map(({ title, detail, path, Icon }, index) => (
+          <a key={path} href={withBasePath(path)} className="hero-service-link">
+            <span className="hero-service-meta"><span>0{index + 1}</span><Icon aria-hidden="true" size={20} /></span>
+            <span className="hero-service-title">{title}<ArrowUpRight aria-hidden="true" className="hero-service-arrow" /></span>
+            <span className="hero-service-detail">{detail}</span>
+          </a>
+        ))}
+      </motion.nav>}
+
       <motion.div
         initial={{ y: 22 }}
         animate={{ y: 0 }}
         transition={{ duration: reducedMotion ? 0 : 0.45, ease: 'easeOut' }}
-        className="absolute left-0 bottom-0 z-10 w-fit h-fit flex flex-col justify-end md:gap-10 gap-5 px-5 md:px-10 pb-15 text-white md:pointer-events-none"
+        className="absolute left-0 bottom-0 z-10 w-fit h-fit flex flex-col justify-end md:gap-6 gap-4 px-5 md:px-10 pb-28 text-white md:pointer-events-none"
       >
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tight drop-shadow-[0_8px_30px_rgba(0,0,0,0.85)]">
-          One Platform. <br /> Infinite Payment Possibilities
+          {title}
         </h1>
         <p className="text-base md:text-xl lg:text-2xl max-w-4xl leading-tight font-medium drop-shadow-[0_6px_22px_rgba(0,0,0,0.9)]">
-          SOLUTION ONE is a global fintech company empowering businesses to accept and process payments seamlessly across 40+ countries with secure, scalable, and compliant technology.
+          {description}
         </p>
       </motion.div>
     </section>

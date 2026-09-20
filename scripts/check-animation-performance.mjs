@@ -17,7 +17,7 @@ try {
       await page.evaluate(({ top, range, progress }) => scrollTo({ top: top + range * progress, behavior: 'instant' }), { ...bounds, progress });
       await page.waitForTimeout(550);
     }
-    assert.equal(await section.locator('button').count(), 5);
+    assert.equal(await section.locator('button').count(), 3);
     await page.screenshot({ path: join(tmpdir(), `home-features-performance-${width}.png`) });
     const timings = await page.evaluate(({ top, range }) => new Promise(resolve => {
       const frames = []; let previous = performance.now();
@@ -29,7 +29,7 @@ try {
       }
       requestAnimationFrame(tick);
     }), bounds);
-    console.log(`Home ${width}: five features present; frame sample`, timings);
+    console.log(`Home ${width}: three feature categories present; frame sample`, timings);
     await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
     await page.waitForFunction(() => document.querySelector('[data-home-feature-artwork]')?.dataset.animationPlaying === 'false');
     assert.equal(await page.locator('[data-home-feature-artwork]').getAttribute('data-animation-playing'), 'false');

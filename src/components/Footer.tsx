@@ -62,13 +62,19 @@ export const Footer: React.FC = () => {
             <h4 className="text-white font-bold text-base tracking-tight">Company</h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
+                <button onClick={() => navigateTo('/technology')} className="hover:text-cyan-400 transition-colors cursor-pointer">TECHNOLOGY</button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('/operations')} className="hover:text-cyan-400 transition-colors cursor-pointer">OPERATIONS</button>
+              </li>
+              <li>
                 <button onClick={() => scrollToSection('products')} className="hover:text-cyan-400 transition-colors cursor-pointer">
-                  Products
+                  PAYMENT
                 </button>
               </li>
               <li>
                 <button onClick={() => scrollToSection('unify')} className="hover:text-cyan-400 transition-colors cursor-pointer">
-                  Solutions
+                  PAYMENT SOLUTIONS
                 </button>
               </li>
               <li>

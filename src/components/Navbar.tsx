@@ -1,11 +1,13 @@
-import React from 'react';
-import { Home, Layers, Zap, Info, HelpCircle, PhoneCall } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { Home, Layers, Zap, Info, HelpCircle, PhoneCall, Cpu, Users } from 'lucide-react';
 import { Logo } from './Logo';
 import { navigateTo, navigateToHash, pagePathname, withBasePath } from '../lib/routing';
 
 const dockItems = [
-  { label: 'Products', id: 'products', path: '/products', icon: Layers },
-  { label: 'Solutions', id: 'unify', path: '/solutions', icon: Zap },
+  { label: 'PAYMENT', id: 'products', path: '/products', icon: Layers },
+  { label: 'PAYMENT SOLUTIONS', id: 'unify', path: '/solutions', icon: Zap },
+  { label: 'TECHNOLOGY', id: 'technology', path: '/technology', icon: Cpu },
+  { label: 'OPERATIONS', id: 'operations', path: '/operations', icon: Users },
   { label: 'About Us', id: 'about', path: '/about', icon: Info },
   { label: 'Why Us', id: 'why-us', path: '/why-us', icon: HelpCircle },
   { label: 'Contact Us', id: 'contact', path: '/contact', icon: PhoneCall },
@@ -13,9 +15,23 @@ const dockItems = [
 
 export const Navbar: React.FC = () => {
   const pathname = pagePathname();
+  const dockRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const dock = dockRef.current;
+    const active = dock?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (dock && active) dock.scrollLeft = active.offsetLeft - (dock.clientWidth - active.offsetWidth) / 2;
+  }, [pathname]);
   const isContactPage = pathname === '/contact';
 
   const scrollToSection = (id: string) => {
+    if (id === 'operations') {
+      navigateTo('/operations');
+      return;
+    }
+    if (id === 'technology') {
+      navigateTo('/technology');
+      return;
+    }
     if (id === 'products') {
       navigateTo('/products');
       return;
@@ -70,7 +86,7 @@ export const Navbar: React.FC = () => {
         </nav>
       </div>
 
-      <nav className="fixed left-1/2 bottom-6 z-50 -translate-x-1/2 rounded-full bg-[#2563eb]/95 text-white shadow-[0_16px_45px_rgba(37,99,235,0.35)] backdrop-blur-xl max-w-[calc(100vw-24px)] overflow-x-auto scrollbar-hide">
+      <nav ref={dockRef} className="fixed left-1/2 bottom-6 z-50 -translate-x-1/2 rounded-full bg-[#2563eb]/95 text-white shadow-[0_16px_45px_rgba(37,99,235,0.35)] backdrop-blur-xl max-w-[calc(100vw-24px)] overflow-x-auto scrollbar-hide">
         <div className="flex items-center gap-1 p-1.5 whitespace-nowrap">
           <button
             type="button"

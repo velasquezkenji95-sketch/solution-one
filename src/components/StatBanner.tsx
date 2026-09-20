@@ -3,15 +3,14 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 
 const Headline = () => (
   <h2 className="stat-volume-title">
-    <span>$2 Billion+ Processed</span>
-    <span>Globally &amp; Securely</span>
+    <span>Ready to Expand Globally?</span>
   </h2>
 );
 
 const TrustedContent = ({ variant = 'light' }: { variant?: 'light' | 'blue' }) => (
   <div className={`stat-volume-content stat-volume-content-${variant}`}>
     <Headline />
-    <p className="stat-volume-copy">It only takes few seconds to get started.</p>
+    <p className="stat-volume-copy">Payments. Technology. People. One partner for your global operations.</p>
   </div>
 );
 
@@ -32,7 +31,7 @@ export const StatBanner: React.FC = () => {
   ));
 
   return (
-    <section ref={sectionRef} className="stat-volume-section" aria-label="$2 Billion processed">
+    <section ref={sectionRef} className="stat-volume-section" aria-label="Ready to Expand Globally?">
       <TrustedContent />
       <motion.div style={{ clipPath }} className="stat-volume-mask" aria-hidden="true">
         <TrustedContent variant="blue" />

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
-import { ArrowRightLeft, Coins, CreditCard, Send, ShieldCheck } from 'lucide-react';
+import { Check, ChevronDown, Cpu, CreditCard, Users } from 'lucide-react';
 import atomArt from '../assets/payatom-ref/Artboard.2edc3722.png';
 import logo from '../assets/Solution 1 Logo.png';
 import { useAnimationPlayback } from '../lib/useAnimationPlayback';
@@ -8,43 +8,30 @@ import { useAnimationPlayback } from '../lib/useAnimationPlayback';
 const features = [
   {
     id: 1,
-    kicker: 'SOLUTION ONE',
-    title: 'Unified Payment Gateway',
-    desc: 'Unified payment gateway for global merchants to accept payments any currency.',
+    accent: '#0f46d9',
+    kicker: '01 / GLOBAL PAYMENTS',
+    title: 'Global Payment Solutions',
+    services: ['Global Payin', 'Global Payout', 'Local Payment Methods', 'QR / Bank Transfer / E-Wallet', 'Multi-Currency Settlement', 'Unified API Integration'],
     icon: CreditCard,
-    stats: ['Any currency', 'Global merchants'],
+    stats: ['Global Payin', 'Global Payout'],
   },
   {
     id: 2,
-    kicker: 'Crypto Ready',
-    title: 'Crypto Payment Gateway',
-    desc: 'Accept and process cryptocurrency payments (USDT, BTC, ETH, etc.) globally.',
-    icon: Coins,
-    stats: ['USDT', 'BTC / ETH'],
+    accent: '#087b70',
+    kicker: '02 / TECHNOLOGY',
+    title: 'Payment Technology & Infrastructure',
+    services: ['Payment Platform Solutions', 'Custom Payment System Development', 'Wallet & Payment Integration', 'Telegram Bot Development', 'Server & Cloud Infrastructure', 'Custom Technology Solutions'],
+    icon: Cpu,
+    stats: ['Payment Platforms', 'Custom Technology'],
   },
   {
     id: 3,
-    kicker: 'Payout Network',
-    title: 'SOLUTION ONE Payouts',
-    desc: 'Instant payout infrastructure for businesses to distribute funds globally in any currencies you like.',
-    icon: Send,
-    stats: ['Instant rails', '40+ countries'],
-  },
-  {
-    id: 4,
-    kicker: 'Hybrid Settlement',
-    title: 'Fiat-Crypto Settlement',
-    desc: 'A hybrid solution allowing merchants to accept fiat and instantly convert local currencies to crypto.',
-    icon: ArrowRightLeft,
-    stats: ['Fiat to crypto', 'Real-time conversion'],
-  },
-  {
-    id: 5,
-    kicker: 'Enterprise',
-    title: 'Enterprise Solutions',
-    desc: 'Custom integrations, high-volume processing, 24x7 support.',
-    icon: ShieldCheck,
-    stats: ['Custom API', '24x7 support'],
+    accent: '#6346c7',
+    kicker: '03 / CUSTOMER OPERATIONS',
+    title: 'Multilingual Customer Operations',
+    services: ['Multilingual Customer Support', 'Recruitment & Staffing', 'Training', 'Remote Customer Service Teams', 'Quality Management', 'Workforce Management'],
+    icon: Users,
+    stats: ['Multilingual Support', 'Workforce Management'],
   },
 ];
 
@@ -125,7 +112,7 @@ export const ProductFeatures: React.FC = () => {
             >
               <div className="mb-5 flex items-center gap-2 rounded-full bg-slate-100 px-4 py-3 text-sm text-slate-400">
                 <span className="size-2 rounded-full bg-[#0f46d9]" />
-                <span>Route details</span>
+                <span>Service overview</span>
               </div>
               {activeFeature.stats.map((stat) => (
                 <div key={stat} className="flex items-center justify-between border-t border-blue-100 py-3 text-slate-800">
@@ -161,54 +148,59 @@ export const ProductFeatures: React.FC = () => {
 
           <div className="hidden h-[78%] w-px bg-blue-300/70 lg:block" />
 
-          <div className="flex max-h-full flex-col overflow-y-auto overscroll-contain lg:justify-center">
+          <div className="home-feature-list flex max-h-full flex-col overflow-y-auto overscroll-contain">
             <AnimatePresence initial={false}>
             {visibleFeatures.map((item, index) => {
               const isOpen = displayIndex === index;
               const Icon = item.icon;
 
               return (
-                <motion.button
+                <motion.article
                   key={item.id}
-                  type="button"
                   initial={{ opacity: 0, y: 28 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 28 }}
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   onMouseEnter={() => setHoverIndex(index)}
                   onMouseLeave={() => setHoverIndex(null)}
-                  onFocus={() => setHoverIndex(index)}
-                  onBlur={() => setHoverIndex(null)}
-                  onClick={() => setHoverIndex(index)}
-                  className="group shrink-0 border-t border-blue-300 py-2 text-left transition-colors last:border-b lg:py-4"
+                  style={{ '--feature-accent': item.accent } as React.CSSProperties}
+                  className={`home-feature-row group shrink-0 ${isOpen ? 'is-open' : ''}`}
                 >
-                  <div className="flex items-start gap-3 lg:gap-5">
-                    <div className={`mt-1 flex h-7 w-10 shrink-0 items-center justify-evenly rounded-full border text-sm transition-colors lg:w-14 ${isOpen ? 'border-[#0f46d9] bg-[#0f46d9] text-white' : 'border-[#0f46d9] text-[#0f46d9]'}`}>
-                      <span className={`size-2 rounded-full ${isOpen ? 'bg-white' : 'bg-[#0f46d9]'}`} />
-                      <span>{item.id}</span>
-                    </div>
+                  <h3>
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-controls={`home-feature-services-${item.id}`}
+                    onFocus={() => setHoverIndex(index)}
+                    onBlur={() => setHoverIndex(null)}
+                    onClick={() => setHoverIndex(index)}
+                    className="home-feature-trigger"
+                  >
+                    <span className="home-feature-icon"><Icon size={22} aria-hidden="true" /></span>
                     <div className="min-w-0 flex-1">
-                      <p className="mb-1 text-[10px] font-bold uppercase tracking-normal lg:text-xs">{item.kicker}</p>
-                      <h3 className={`text-lg font-medium leading-tight tracking-normal transition-opacity lg:text-2xl ${isOpen ? 'opacity-100' : 'opacity-55 group-hover:opacity-100'}`}>
+                      <span className="home-feature-kicker">{item.kicker}</span>
+                      <span className="home-feature-title">
                         {item.title}
-                      </h3>
+                      </span>
+                    </div>
+                    <ChevronDown className="home-feature-chevron" size={18} aria-hidden="true" />
+                  </button>
+                  </h3>
                       <AnimatePresence initial={false}>
                         {isOpen && (
-                          <motion.p
+                          <motion.ul
+                            id={`home-feature-services-${item.id}`}
                             initial={{ height: 0, opacity: 0, y: -8 }}
                             animate={{ height: 'auto', opacity: 1, y: 0 }}
                             exit={{ height: 0, opacity: 0, y: -8 }}
                             transition={{ duration: 0.25 }}
-                            className="mt-2 overflow-hidden text-sm leading-snug text-[#0b2d86] lg:mt-3 lg:text-base"
+                            className="home-feature-services"
                           >
-                            {item.desc}
-                          </motion.p>
+                            {item.services.map(service => <li key={service}><Check size={14} aria-hidden="true" /><span>{service}</span></li>)}
+                          </motion.ul>
                         )}
                       </AnimatePresence>
-                    </div>
-                    <Icon className={`mt-1 size-6 shrink-0 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-45'}`} />
-                  </div>
-                </motion.button>
+                </motion.article>
               );
             })}
             </AnimatePresence>
