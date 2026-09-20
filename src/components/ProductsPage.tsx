@@ -111,7 +111,7 @@ const ProductsHero: React.FC = () => (
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       className="pointer-events-none relative z-10 text-4xl font-semibold leading-none tracking-tight md:text-5xl lg:text-7xl"
     >
-      PAYMENT
+      Payment
     </motion.h1>
     <motion.p
       initial={{ opacity: 0, y: 28 }}

@@ -87,7 +87,7 @@ const SolutionsHero: React.FC = () => (
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       className="relative z-10 text-5xl font-semibold leading-none md:text-7xl"
     >
-      PAYMENT SOLUTIONS
+      Payment Solutions
     </motion.h1>
     <motion.p
       initial={{ opacity: 0, y: 28 }}

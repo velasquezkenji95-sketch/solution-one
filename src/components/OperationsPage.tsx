@@ -32,7 +32,7 @@ export function OperationsPage() {
           <AnimatedVideo src={publicAsset('/Hero/Hero.mp4')} autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,20,46,0.26),rgba(6,20,46,0.2)_50%,rgba(8,50,132,0.54))]" />
           <motion.div {...reveal} className="relative z-10 pointer-events-none">
-            <h1 className="operations-hero-title font-semibold leading-none">OPERATIONS</h1>
+            <h1 className="operations-hero-title font-semibold leading-none">Operations</h1>
             <p className="mt-7 max-w-4xl text-xl font-semibold leading-tight md:text-2xl">Online HR Solutions That Scale With Your Business</p>
           </motion.div>
         </section>

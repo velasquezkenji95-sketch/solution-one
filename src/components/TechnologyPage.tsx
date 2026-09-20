@@ -31,7 +31,7 @@ export function TechnologyPage() {
     <div className="bg-[#faf7f2] text-[#06142e] selection:bg-blue-200">
       <Navbar />
       <main>
-        <Hero title="TECHNOLOGY" description="Built for Scale. Designed for Integration." showServices={false} />
+        <Hero title="Technology" description="Built for Scale. Designed for Integration." showServices={false} />
         <section className="technology-intro px-5 py-20 text-[#0b47bd] md:px-10 md:py-28">
           <div className="mx-auto max-w-6xl">
             <motion.div {...reveal}>

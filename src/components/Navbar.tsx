@@ -4,10 +4,10 @@ import { Logo } from './Logo';
 import { navigateTo, navigateToHash, pagePathname, withBasePath } from '../lib/routing';
 
 const dockItems = [
-  { label: 'PAYMENT', id: 'products', path: '/products', icon: Layers },
-  { label: 'PAYMENT SOLUTIONS', id: 'unify', path: '/solutions', icon: Zap },
-  { label: 'TECHNOLOGY', id: 'technology', path: '/technology', icon: Cpu },
-  { label: 'OPERATIONS', id: 'operations', path: '/operations', icon: Users },
+  { label: 'Payment', id: 'products', path: '/products', icon: Layers },
+  { label: 'Payment Solutions', id: 'unify', path: '/solutions', icon: Zap },
+  { label: 'Technology', id: 'technology', path: '/technology', icon: Cpu },
+  { label: 'Operations', id: 'operations', path: '/operations', icon: Users },
   { label: 'About Us', id: 'about', path: '/about', icon: Info },
   { label: 'Why Us', id: 'why-us', path: '/why-us', icon: HelpCircle },
   { label: 'Contact Us', id: 'contact', path: '/contact', icon: PhoneCall },
