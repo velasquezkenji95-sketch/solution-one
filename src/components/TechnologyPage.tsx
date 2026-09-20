@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, Blocks, Bot, CreditCard, LayoutDashboard, Net
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { Hero } from './Hero';
+import { ServiceExplorer } from './ServiceExplorer';
 import { publicAsset, withBasePath } from '../lib/routing';
 
 const services = [
@@ -58,16 +59,7 @@ export function TechnologyPage() {
               <h2 className="text-3xl font-semibold leading-tight text-[#0b47bd] md:text-4xl">Solution One - Built for Scale. Designed for Integration.</h2>
               <p className="mt-8 text-lg leading-relaxed"><strong>Solution One</strong> provides end-to-end technology solutions for building user-friendly digital platforms, including P2P interfaces, third-party payment gateway dashboards, client portals, automated bots, and more. We turn complex technology requirements into scalable, intuitive, and integration-ready solutions.</p>
             </motion.div>
-            <ol className="mt-16 divide-y divide-blue-200 border-y border-blue-200">
-              {services.map(({ title, text, Icon }, index) => (
-                <motion.li {...reveal} key={title} className="technology-service grid gap-5 py-8 md:grid-cols-[1fr_1fr] md:gap-12 md:py-10">
-                  <h3 className="flex items-start gap-4 text-xl font-semibold text-[#0b47bd] md:text-2xl">
-                    <span aria-hidden="true" className="pt-1 text-sm font-medium text-[#476a9f]">0{index + 1}</span><Icon className="mt-1 size-6 shrink-0" /><span>{title}</span>
-                  </h3>
-                  <p className="text-base leading-relaxed md:text-lg">{text}</p>
-                </motion.li>
-              ))}
-            </ol>
+            <ServiceExplorer services={services} label="Technology" media={['/Growth/blue.mp4', '/Growth/purple.mp4', '/Growth/green.mp4', '/Growth/pink.mp4']} />
           </div>
         </section>
 

@@ -3,6 +3,8 @@ import { ArrowUpRight, UserSearch, Headset, ClipboardList, GraduationCap, Calend
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { AnimatedVideo } from './AnimatedVideo';
+import { ServiceExplorer } from './ServiceExplorer';
+import { TalentExplorer } from './TalentExplorer';
 import { publicAsset, withBasePath } from '../lib/routing';
 
 const services = [
@@ -13,8 +15,6 @@ const services = [
   { title: 'Administrative Assistance', Icon: CalendarCheck, text: 'SOLUTION ONE provides administrative and personnel support services that assist businesses in managing documentation, KPIs, scheduling, coordination, internal communication, and daily operational tasks with greater efficiency.' },
   { title: 'Remote Job Monitoring', Icon: MonitorCheck, text: 'We implement remote monitoring program to ensure your team remains productive and aligned with business goals, regardless of their location. With SOLUTION ONE\'s remote job monitoring solutions, effectiveness of your team will be guaranteed at max.' },
 ];
-
-const roles = ['HR Specialist', 'Live Chat Specialist', 'Voice Call Specialist', 'In house Trainer', 'Management Role/Pre-TL', 'Translator', 'Risk Control Specialist', 'Finance Specialist', 'Live Model/Live Cam', 'Marketing Crew', 'AI - Video Editor', 'Visual/UI/UX/Web Designer', 'Sales Crew', 'Quality Assurance Specialist'];
 
 export function OperationsPage() {
   const reducedMotion = useReducedMotion();
@@ -67,14 +67,7 @@ export function OperationsPage() {
               <h2 className="text-3xl font-semibold leading-tight text-[#0b47bd] md:text-4xl">Turning Workforce Challenges into Measurable Results</h2>
               <p className="mt-6 text-lg leading-relaxed">We help businesses improve team performance, operational efficiency, and workforce management through practical HR strategies and real execution support.</p>
             </motion.div>
-            <ol aria-label="Operations services" className="mt-12 divide-y divide-blue-200 border-y border-blue-200">
-              {services.map(({ title, text, Icon }, index) => (
-                <motion.li {...reveal} key={title} className="operations-service grid gap-5 py-8 md:grid-cols-[1fr_1.3fr] md:gap-16 md:py-10">
-                  <h3 className="flex items-start gap-4 text-xl font-semibold text-[#0b47bd] md:text-2xl"><span aria-hidden="true" className="pt-1 text-sm font-medium text-[#476a9f]">0{index + 1}</span><Icon className="mt-1 size-6 shrink-0" /><span>{title}</span></h3>
-                  <p className="text-base leading-relaxed md:text-lg">{text}</p>
-                </motion.li>
-              ))}
-            </ol>
+            <ServiceExplorer services={services} label="Operations" media={['/Growth/green.mp4', '/Growth/blue.mp4', '/Growth/purple.mp4', '/Growth/pink.mp4', '/Growth/blue.mp4', '/Growth/green.mp4']} />
           </div>
         </section>
 
@@ -82,11 +75,9 @@ export function OperationsPage() {
           <div className="mx-auto max-w-6xl">
             <motion.div {...reveal} className="flex items-center gap-4 text-[#0b47bd]">
               <Users className="size-9 shrink-0" />
-              <h2 className="text-3xl font-semibold leading-tight md:text-4xl">Talent from 15+ country</h2>
+              <h2 className="text-3xl font-semibold leading-tight md:text-4xl">Talent from 15+ countries</h2>
             </motion.div>
-            <ul aria-label="Talent roles" className="mt-10 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
-              {roles.map((role, index) => <motion.li {...reveal} transition={{ duration: reducedMotion ? 0 : 0.5, delay: reducedMotion ? 0 : (index % 3) * 0.1 }} key={role} className="flex items-start gap-3 border-b border-blue-200 py-5 text-base font-medium md:text-lg"><span aria-hidden="true" className="mt-2 size-2 shrink-0 rounded-full bg-[#0b47bd]" /><span className="min-w-0 break-words">{role}</span></motion.li>)}
-            </ul>
+            <TalentExplorer />
           </div>
         </section>
 
